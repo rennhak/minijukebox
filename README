@@ -1,3 +1,114 @@
 
+MiniJukebox
+-----------
+
+MiniJukebox started out as a oneliner (see the archive directory) and then later changed into a
+rather small commandline frontend for the WinAmp Radio streams website. Probably there are many
+easier ways to surf and get those radio channels but just for the fun of a hack I created this.
+
+
+Features
+--------
+
+  o Caching of results into binary blobs for later use
+  o Time measurement of the stream speeds via libcurl
+
+
+Depends
+-------
+
+  o Ruby
+  o Ruby HPricot
+  o Mplayer
+  o curl (for the -t option)
+
+
+Todo
+----
+
+  o Make a nice configuration file to choose, e.g. which player to use etc.
+    (default is currently mplayer)
+  o Threads (e.g. 5 simulat. access to the website)
+
+Usage
+-----
+
+% ./MiniJukebox.rb -h
+/usr/lib/ruby/1.8/hpricot/builder.rb:11: warning: `&' interpreted as argument prefix
+Usage: minijukebox [options]
+    -o, --usecache                   Use the already cached Playlist
+    -r, --recache                    Recache the Playlist *now*
+    -v, --[no-]verbose               Run verbosely
+    -t, --time                       Benchmark all streams
+
+
+Just run ./MiniJukebox and enjoy.
+
+
+Sample output
+-------------
+
+% ./MiniJukebox.rb 
+Please choose which music to play...
+
+0 |    .977 The Hitz Channel
+1 |    TechnoBase.FM - 24h Techno, Dance, Trance, House and More - 128k MP3
+2 |    Absolutely Smooth Jazz - S K Y . F M - the world's smoothest jazz 24 hours a day
+3 |    .977 The 80s Channel
+4 |    -=[:: HOT 108 JAMZ ::]=- #1 FOR HIP HOP - 128K HD) * CONNECT FROM OUR WEBSITE www.hot108.com
+5 |    ..:: French Kiss FM ::....:: Playlist on www.frenchkissfm.com ::..
+6 |    #MUSIK.MAIN - WWW.RAUTEMUSIK.FM - 24H TOP 40 POP HITS 80S 90S DANCE HOUSE ROCK RNB AND MORE!
+7 |    Groove Salad: a nicely chilled plate of ambient beats and grooves. [SomaFM]
+8 |    RMF FM
+9 |    #MUSIK.CLUB - WWW.RAUTEMUSIK.FM - 24H MIXED HANDS UP TRANCE DANCE TECHNO HARDSTYLE HOUSE AND MORE!
+10 |    The Alex Jones Show
+11 |    Radio Paradise - DJ-mixed modern & classic rock, world, electronica & more - info: radioparadise.com
+12 |    D I G I T A L L Y - I M P O R T E D - Vocal Trance - a fusion of trance, dance, and chilling vocals 
+13 |    DJ ceLeBi iLe HeR TeLDeN Sponsor: Aklavye.NeT Radyo Host Web Host
+14 |    PulsRadio - www.pulsradio.com - DANCE & TRANCE Non Stop ! from France
+15 |    #MUSIK.JAM - WWW.RAUTEMUSIK.FM - 24H HIPHOP RNB RAP SOUL REGGAE DANCEHALL URBAN AND MORE!
+16 |    RADIO ZET
+17 |    ENJOYSTATION.NET France Vichy! Paris, Canada, America, Italia, England, Deutschland, French
+18 |    181.FM - Classic Hits --- Home of The 60's and 70's
+19 |    1POWER - #1 FOR HITZ & HIP HOP *In HD) www.powerhitz.com
+20 |    Schlagerhoelle - wir heizen euch ein...!
+21 |    181.FM - The Buzz (Your Alternative Station!)
+22 |    D I G I T A L L Y - I M P O R T E D - European Trance, Techno, Hi-NRG... we can't define it!
+23 |    S K Y . F M - Top Hits Music - who cares about the chart order, less rap & more hits!
+24 |    Techno4ever Radio - 24 Hours open
+25 |    #MUSIK.GOLDIES - WWW.RAUTEMUSIK.FM - 24H OLDIES CLASSIC ROCK 60S 70S 80S POP AND MORE!
+26 |    Chaos Radio - the official euIRC Radio
+27 |    S K Y . F M - 80s, 80s, 80s! - Hear your classic favorites right here! (www.sky.fm)
+28 |    #MUSIK.EXTREME - WWW.RAUTEMUSIK.FM - 24H ROCK METAL PUNK SKA ALTERNATIVE AND MORE!
+29 |    idobi Radio: Music that doesn't suck! News, interviews and the best in alternative, rock, and punk m
+30 |    181.FM - Kickin' Country - Today's BEST Country!
+31 |    Radio VHR - Schlager, Discofox, Volksmusik, Oldies, Pop, Rock, 80s, 70s & Top 40
+32 |    (''v'')   Dj SoReS  iLe   Aninda istek Hatti  (''v'')
+33 |    Radio21 Romania
+34 |    Radio ZU Live - www.radiozu.ro
+35 |    181.fm - The Eagle (Your Home For REAL Classic Rock!)
+36 |    S K Y . F M - Mostly Classical - Listen and Relax, it's good for you! www.sky.fm
+37 |    KQED Public Radio
+38 |    90.9 WBUR FM
+39 |    1.FM - Otto's Baroque Musick
+40 |    D I G I T A L L Y - I M P O R T E D - Chillout - ambient psy chillout, check out our trippy flavors!
+41 |    BLITZRADIO.FM - ELECTRONIC MUSIC RADIO - 24H ONAIR - POWERED BY WWW.BLITZ-STREAM.DE ! 
+42 |    ChroniX Aggression - Loud & Clear - www.chronixradio.com
+43 |    181.FM - Chilled
+44 |    javaBeats.FM Internet Radio :: Streaming 24/7 Techno, Trance, Breakbeats, and More!
+45 |    KissFM Romania- www.myKiss.ro -Hit Music Station
+46 |    Mix 106.5
+47 |    S K Y . F M - New Age - soothing sounds of new age and world music!
+48 |    DEFJAY.DE - 100% RnB! (German Service)
+49 |    1.FM - Top 40
+
+Your choice : 
+
+<waits for user input>
+
+
+License
+-------
+
 
 (C) 2009, Bjoern Rennhak, under an GPL v2 licence. http://www.gnu.org/licenses/gpl-2.0.txt
