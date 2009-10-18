@@ -43,11 +43,26 @@ def streams file = "/tmp/minijukebox-cache"
     @list
 end
 
-def getStreams! baseURL = "http://www.winamp.com/media/radio"
+
+#def getStreams! baseURL = "http://www.winamp.com/media/radio"
+def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20"
     choices = Array.new                                                                                               # we store our grabbed results here
     puts "Caching..."
-    Hpricot( open(baseURL) ).search('//div[@class=content]//strong//a').each do |a|
-        choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( a.attributes['href'] ) ] ) if a.attributes['href'] =~ %r{\.pls}i
+
+    @ids = []
+    Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="dirTuneMoreDiv clearFix"]/a[@class=tuneIn]' ).each { |o| a = o.attributes['onClick']; ( a.nil? ) ? ( @ids << o.attributes['href'].gsub(/.*id=(.*)$/,'\1').to_s ) : ( @ids << a.gsub(/holdStationID\(\'([0-9]+).*/, '\1' ).to_s ) }
+
+    p @ids
+
+    #Hpricot( open(baseURL) ).search('//div[@class=content]//strong//a').each do |a|
+                                                                                                                                                                                                    #
+    cnt = 0
+    Hpricot( open( baseURL )).search( '//a[@class=dirStationCntexpand]' ).each do |a|
+        # choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( a.attributes['href'] ) ] ) if a.attributes['href'] =~ %r{\.pls}i
+        choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( @ids[ cnt ].to_s ) ] ) # if a.attributes['href'] =~ %r{\.pls}i
+        p a.attributes['title']
+        p @ids[ cnt ]
+        cnt += 1
     end
 
     print "\n"
@@ -74,12 +89,13 @@ def printMenu! choices = getStreams!
     choices[ gets.chomp!.to_i ][1]
 end
 
-def getStreamURLFromPLSFile! plsFileURL
+def getStreamURLFromPLSFile! plsID = nil, plsFileURL = "http://yp.shoutcast.com/sbin/tunein-station.pls?id="
+    raise ArgumentError, "Need a valid PLS ID" if plsID.nil?
     streamURL = Array.new
-    Hpricot( open( plsFileURL ) ).to_s.each do |l| 
+    Hpricot( open( plsFileURL + plsID.to_s ) ).to_s.each do |l| 
         streamURL << URI.extract(l,'http').to_s if l =~ %r{File}i
     end
-    puts "  - #{plsFileURL}"
+    puts "  - #{plsFileURL+plsID.to_s}"
     streamURL
 end
 
