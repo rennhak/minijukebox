@@ -52,7 +52,7 @@ def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20"
     @ids = []
     Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="dirTuneMoreDiv clearFix"]/a[@class=tuneIn]' ).each { |o| a = o.attributes['onClick']; ( a.nil? ) ? ( @ids << o.attributes['href'].gsub(/.*id=(.*)$/,'\1').to_s ) : ( @ids << a.gsub(/holdStationID\(\'([0-9]+).*/, '\1' ).to_s ) }
 
-    p @ids
+    #p @ids
 
     #Hpricot( open(baseURL) ).search('//div[@class=content]//strong//a').each do |a|
                                                                                                                                                                                                     #
@@ -60,8 +60,8 @@ def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20"
     Hpricot( open( baseURL )).search( '//a[@class=dirStationCntexpand]' ).each do |a|
         # choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( a.attributes['href'] ) ] ) if a.attributes['href'] =~ %r{\.pls}i
         choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( @ids[ cnt ].to_s ) ] ) # if a.attributes['href'] =~ %r{\.pls}i
-        p a.attributes['title']
-        p @ids[ cnt ]
+        #p a.attributes['title']
+        #p @ids[ cnt ]
         cnt += 1
     end
 
