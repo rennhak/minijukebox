@@ -6,7 +6,7 @@ require 'open-uri'
 require 'date'
 require 'optparse'
 # Needs libcurl
-
+# Needs mplayer 
 
 class MiniJukebox # {{{
 
@@ -61,10 +61,11 @@ class MiniJukebox # {{{
       puts "Caching..."
 
       @ids = []
-      Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="dirTuneMoreDiv clearFix"]/a[@class=tuneIn]' ).each { |o| a = o.attributes['onClick']; ( a.nil? ) ? ( @ids << o.attributes['href'].gsub(/.*id=(.*)$/,'\1').to_s ) : ( @ids << a.gsub(/holdStationID\(\'([0-9]+).*/, '\1' ).to_s ) }
+      Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="dirTuneMoreDiv clearFix"]/a[@class=tuneIn]' ).each do |o| 
+        @ids << a = o.to_s.gsub(/.*holdStationID\(\'([0-9]+)\'\);.*$/, '\1' ).gsub("\n\t</a>","")
+      end
 
       #p @ids
-
       #Hpricot( open(baseURL) ).search('//div[@class=content]//strong//a').each do |a|
                                                                                                                                                                                                       #
       cnt = 0
