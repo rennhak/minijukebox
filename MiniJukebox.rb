@@ -1,13 +1,17 @@
-#!/usr/bin/ruby -w
-#
+#!/usr/bin/ruby
 
+
+# = Libraries
 require 'hpricot'
 require 'open-uri'
 require 'date'
 require 'optparse'
-# Needs libcurl
-# Needs mplayer 
 
+# Needs libcurl
+# Needs mplayer
+
+
+# = MiniJukebox is a very small and simple stream player with caching functionality
 class MiniJukebox # {{{
 
   # = Initialzie constructor for the MiniJukebox class
@@ -56,7 +60,6 @@ class MiniJukebox # {{{
 
   # = GetStreams! function will download webcontent, parse it and return a list of accessable streams in order of ranking from shoutcast
   def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20" # {{{
-  #def getStreams! baseURL = "http://www.winamp.com/media/radio"
       choices = Array.new                                                                                               # we store our grabbed results here
       puts "Caching..."
 
@@ -65,15 +68,9 @@ class MiniJukebox # {{{
         @ids << a = o.to_s.gsub(/.*holdStationID\(\'([0-9]+)\'\);.*$/, '\1' ).gsub("\n\t</a>","")
       end
 
-      #p @ids
-      #Hpricot( open(baseURL) ).search('//div[@class=content]//strong//a').each do |a|
-                                                                                                                                                                                                      #
       cnt = 0
       Hpricot( open( baseURL )).search( '//a[@class=dirStationCntexpand]' ).each do |a|
-          # choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( a.attributes['href'] ) ] ) if a.attributes['href'] =~ %r{\.pls}i
           choices.push( [ a.attributes['title'], getStreamURLFromPLSFile!( @ids[ cnt ].to_s ) ] ) # if a.attributes['href'] =~ %r{\.pls}i
-          #p a.attributes['title']
-          #p @ids[ cnt ]
           cnt += 1
       end
 
