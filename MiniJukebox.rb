@@ -103,25 +103,33 @@ def play! streamURLs, playerProgram = "mplayer"
     streamURLs.each { |url| exec "#{playerProgram} #{url}" }
 end
 
-@options = {}
-OptionParser.new do |opts|
-    opts.banner = "Usage: minijukebox [options]"
 
-    opts.on("-o", "--usecache", "Use the already cached Playlist") do |o|
-        @options[:usecache] = o
-    end
 
-    opts.on("-r", "--recache", "Recache the Playlist *now*") do |r|
-        @options[:recache] = r
-    end
+# Direct invocation
+if __FILE__ == $0
 
-    opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-        @options[:verbose] = v
-    end
+  @options = {}
+  OptionParser.new do |opts|
+      opts.banner = "Usage: minijukebox [options]"
 
-    opts.on("-t", "--time", "Benchmark all streams") do |t|
-        @options[:time] = t
-    end
-end.parse!
+      opts.on("-o", "--usecache", "Use the already cached Playlist") do |o|
+          @options[:usecache] = o
+      end
 
-play!( printMenu!( streams ) )
+      opts.on("-r", "--recache", "Recache the Playlist *now*") do |r|
+          @options[:recache] = r
+      end
+
+      opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+          @options[:verbose] = v
+      end
+
+      opts.on("-t", "--time", "Benchmark all streams") do |t|
+          @options[:time] = t
+      end
+  end.parse!
+
+  play!( printMenu!( streams ) )
+
+end # of if __FILE__ == $0
+
