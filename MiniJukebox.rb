@@ -5,15 +5,19 @@ require 'hpricot'
 require 'open-uri'
 require 'date'
 require 'optparse'
+# Needs libcurl
 
 
-class MiniJukebox
-  def initialize options
+class MiniJukebox # {{{
+
+  # = Initialzie constructor for the MiniJukebox class
+  def initialize options # {{{
     @options = options
-  end
+  end # of def initialize }}}
 
+  # = Streams function will download streams or reload cache of music streams from shoutcast
   # Uses /tmp/ caching, which will keep the list for 1 day and download a new one
-  def streams file = "/tmp/minijukebox-cache"
+  def streams file = "/tmp/minijukebox-cache" # {{{
       if( @options[:usecache] )
           puts "o Using already cached playlists" if @options[:verbose]
           if( File.exists?( file ) ) 
@@ -47,11 +51,12 @@ class MiniJukebox
       end
 
       @list
-  end
+  end # of def streams }}}
 
 
+  # = GetStreams! function will download webcontent, parse it and return a list of accessable streams in order of ranking from shoutcast
+  def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20" # {{{
   #def getStreams! baseURL = "http://www.winamp.com/media/radio"
-  def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20"
       choices = Array.new                                                                                               # we store our grabbed results here
       puts "Caching..."
 
@@ -74,17 +79,23 @@ class MiniJukebox
       print "\n"
 
       choices
-  end
+  end # of def getStreams! }}}
 
-  # needs curl installed
-  # time == testtime per stream
-  # returns byte as float
-  # FIXME: threads !!!!
-  def streamSpeed url, time
+  # = StreamSpeed function will use curl to measure the speed of the given stream url
+  # @param time Testtime per stream
+  # @returns Bytes (speed), as float
+  # @warn Needs curl installed
+  # FIXME: threads
+  def streamSpeed url, time # {{{
+    begin
       speedInByte = `curl -m#{time} --connect-timeout 5 -s -o /dev/null -w '%{speed_download}' #{url}`.to_f
-  end
+    rescue
+      raise Exception, "Needs libcurl (curl) installed."
+    end
+  end # of def streamSpeed }}}
 
-  def printMenu! choices = getStreams!
+  # = PrintMenu! function does print only a simple ASCII based menu with choices of <NUM>
+  def printMenu! choices = getStreams! # {{{
       print "Please choose which music to play...\n\n" 
       if( @options[:time] )
           choices.each_with_index { |l, i| printf("%2i | Speed: %5.2f kB/s | %s\n", i, streamSpeed( l[1].first.to_s, 1)/1000.0, l[0].to_s) }
@@ -93,9 +104,10 @@ class MiniJukebox
       end
       print "\nYour choice : "
       choices[ gets.chomp!.to_i ][1]
-  end
+  end # of def printMenu! }}}
 
-  def getStreamURLFromPLSFile! plsID = nil, plsFileURL = "http://yp.shoutcast.com/sbin/tunein-station.pls?id="
+  # = GetStreamURLFromPLSFile! extracts the stream url from the downloaded pls files
+  def getStreamURLFromPLSFile! plsID = nil, plsFileURL = "http://yp.shoutcast.com/sbin/tunein-station.pls?id=" # {{{
       raise ArgumentError, "Need a valid PLS ID" if plsID.nil?
       streamURL = Array.new
       Hpricot( open( plsFileURL + plsID.to_s ) ).to_s.each do |l| 
@@ -103,18 +115,18 @@ class MiniJukebox
       end
       puts "  - #{plsFileURL+plsID.to_s}"
       streamURL
-  end
+  end # of def getStreamURLFromPLSFile! }}}
 
-  def play! streamURLs = printMenu!( streams ), playerProgram = "mplayer"
+  # = Play! function uses e.g. mplayer to play the given stream
+  def play! streamURLs = printMenu!( streams ), playerProgram = "mplayer" # {{{
       streamURLs.each { |url| exec "#{playerProgram} #{url}" }
-  end
+  end # of def play! }}}
 
-
-end # of class MiniJukebox
+end # of class MiniJukebox }}}
 
 
 # Direct invocation
-if __FILE__ == $0
+if __FILE__ == $0 # {{{
 
   @options = {}
   OptionParser.new do |opts|
@@ -140,5 +152,6 @@ if __FILE__ == $0
   m = MiniJukebox.new( @options )
   m.play!
 
-end # of if __FILE__ == $0
+end # of if __FILE__ == $0 # }}}
 
+# EOF
