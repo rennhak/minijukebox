@@ -64,8 +64,12 @@ class MiniJukebox # {{{
       puts "Caching..."
 
       @ids = []
-      Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="dirTuneMoreDiv clearFix"]/a[@class=tuneIn]' ).each do |o| 
-        @ids << a = o.to_s.gsub(/.*holdStationID\(\'([0-9]+)\'\);.*$/, '\1' ).gsub("\n\t</a>","")
+      Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="dirTuneMoreDiv clearFix"]/a[@class=tuneIn]' ).each do |o|
+        if( o.attributes['onclick'].empty? )
+          @ids << a = o.attributes['href'].to_s.gsub(/.*id=(.*)/,'\1')
+        else
+          @ids << a = o.to_s.gsub(/.*holdStationID\(\'([0-9]+)\'\);.*$/, '\1' ).gsub("\n\t</a>","")
+        end
       end
 
       cnt = 0
