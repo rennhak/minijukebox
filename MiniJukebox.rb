@@ -59,12 +59,12 @@ class MiniJukebox # {{{
 
 
   # = GetStreams! function will download webcontent, parse it and return a list of accessable streams in order of ranking from shoutcast
-  def getStreams! baseURL = "http://www.shoutcast.com/?numresult=20" # {{{
+  def getStreams! baseURL = "http://shoutcast.com/?order=desc&criteria=listenerhead&count=50&strIndex=20&ajax=true" # {{{
       choices = Array.new                                                                                               # we store our grabbed results here
       puts "Caching..."
 
       @ids = []
-      Hpricot( open( "http://www.shoutcast.com/?numresult=20" )).search( '//div[@class="stationcol"]/a' ).each do |o|
+      Hpricot( open( baseURL )).search( '//div[@class="stationcol"]/a' ).each do |o|
         if( o.attributes['class'] =~ %r{playbutton[0-9]*}i )
 
           choices.push( [ o.attributes['name'], getStreamURLFromPLSFile!( o.attributes['href'].to_s.split("=").last ) ] )
