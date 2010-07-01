@@ -16,7 +16,8 @@ class MiniJukebox # {{{
 
   # = Initialzie constructor for the MiniJukebox class
   def initialize options # {{{
-    @options = options
+    @options  = options
+    @stations = ( options[:stations].nil? ? 20 : options[:stations] )
   end # of def initialize }}}
 
   # = Streams function will download streams or reload cache of music streams from shoutcast
@@ -59,7 +60,7 @@ class MiniJukebox # {{{
 
 
   # = GetStreams! function will download webcontent, parse it and return a list of accessable streams in order of ranking from shoutcast
-  def getStreams! baseURL = "http://shoutcast.com/?order=desc&criteria=listenerhead&count=50&strIndex=20&ajax=true" # {{{
+  def getStreams! baseURL = "http://shoutcast.com/?order=desc&criteria=listenerhead&count=#{@stations}&strIndex=0&ajax=true" # {{{
       choices = Array.new                                                                                               # we store our grabbed results here
       puts "Caching..."
 
@@ -141,6 +142,10 @@ if __FILE__ == $0 # {{{
 
       opts.on("-t", "--time", "Benchmark all streams") do |t|
           @options[:time] = t
+      end
+
+      opts.on("-s", "--stations N", "Number of stations from top 1 to N") do |n|
+        @options[:stations] = n
       end
   end.parse!
 
