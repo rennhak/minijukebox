@@ -60,7 +60,7 @@ class MiniJukebox # {{{
 
 
   # = GetStreams! function will download webcontent, parse it and return a list of accessable streams in order of ranking from shoutcast
-  def getStreams! baseURL = "http://shoutcast.com/?order=desc&criteria=listenerhead&count=#{@stations}&strIndex=0&ajax=true" # {{{
+  def getStreams! baseURL = "http://www.shoutcast.com/?order=desc&criteria=listenerhead&count=#{@stations}&strIndex=0&ajax=false" # {{{
       choices = Array.new                                                                                               # we store our grabbed results here
       puts "Caching..."
 
